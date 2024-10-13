@@ -276,15 +276,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-
-
     class MyWebViewActivity extends WebViewClient
     {
-
-
-
-
         @SuppressLint("NewApi")
         public boolean shouldOverrideUrlLoading(WebView webView, WebResourceRequest webResourceRequest)
         {
@@ -340,14 +333,26 @@ public class MainActivity extends AppCompatActivity {
                 int result=g.getInt("result");
                 if (result == 0)
                 {
-                    AlertDialog a=new AlertDialog.Builder(MainActivity.this).create();
-                    TextView tv=new TextView(MainActivity.this);
-                    tv.setText(g.getString("ticket"));
-                    tv.setTextIsSelectable(true);
-                    a.setView(tv);
-                    a.show();
-                }
+                    String ticket = g.getString("ticket");
 
+                    post(BaseUrl+"/postticket2","ticket="+ticket,new CallBack() {
+                        @Override
+                        public void postCallBack(String code) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    AlertDialog a=new AlertDialog.Builder(MainActivity.this).create();
+                                    TextView tv=new TextView(MainActivity.this);
+                                    tv.setText(code);
+                                    tv.setTextIsSelectable(true);
+                                    a.setView(tv);
+                                    a.show();
+                                }
+                            });
+
+                        }
+                    });
+                }
             }
             catch (JSONException e)
             {
